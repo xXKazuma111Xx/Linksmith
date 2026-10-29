@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linksmith</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="shell">
+
+    <header>
+      <span class="header-title">Linksmith</span>
+      <span class="header-sub">by Edgar Akonski</span>
+    </header>
+
+    <main>
+      <!-- SECTION 1: INPUT -->
+      <section class="section">
+        <div class="section-label">
+          <span class="section-num">01</span>
+          <span class="section-name">Inputs</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="source">Campaign Source</label>
+            <select id="source">
+              <option value="">— Select —</option>
+              <option value="Google">Google</option>
+              <option value="Facebook">Facebook</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="TikTok">TikTok</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="language">Language</label>
+            <select id="language">
+              <option value="">— Select —</option>
+              <option value="HE" selected>HE</option>
+              <option value="EN">EN</option>
+              <option value="FR">FR</option>
+              <option value="SP">SP</option>
+              <option value="IT">IT</option>
+              <option value="AR">AR</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="location">Location</label>
+            <select id="location">
+              <option value="">— Select —</option>
+              <option value="IL" selected>IL</option>
+              <option value="US">US</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="date">Date</label>
+            <input type="text" id="date" placeholder="e.g. 6/26" />
+          </div>
+        </div>
+
+        <div class="field field--full">
+          <label for="baseUrl">Base URL</label>
+          <input type="text" id="baseUrl" placeholder="https://example.com/landing-page" />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="campaignType">Campaign Medium (utm_medium)</label>
+            <select id="campaignType">
+              <option value="">— Select —</option>
+              <option value="Search">Search</option>
+              <option value="Demand Gen">Demand Gen</option>
+              <option value="PMAX">PMAX</option>
+              <option value="Video">Video</option>
+              <option value="GDN">GDN</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Extension">Extension</option>
+              <option value="Sitelink Extension">Sitelink Extension</option>
+              <option value="Boost">Boost</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="campaignObjective">Campaign Name</label>
+            <select id="campaignObjective">
+              <option value="">— Select —</option>
+              <option value="Leads">Leads</option>
+              <option value="Engagement">Engagement</option>
+              <option value="Sales">Sales</option>
+              <option value="Awareness">Awareness</option>
+              <option value="Website Traffic">Website Traffic</option>
+              <option value="LeadGen">LeadGen</option>
+              <option value="Traffic">Traffic</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="match">Match Type</label>
+            <select id="match">
+              <option value="">— Select —</option>
+              <option value="Broad">Broad</option>
+              <option value="Phrase">Phrase</option>
+              <option value="Exact">Exact</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="specialName">Special Name</label>
+            <input type="text" id="specialName" placeholder="Optional label" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="campaignTerm">Campaign Term (utm_term)</label>
+            <input type="text" id="campaignTerm" placeholder="Keywords / terms" />
+          </div>
+
+          <div class="field">
+            <label for="adName">Ad Name (utm_content)</label>
+            <input type="text" id="adName" placeholder="Ad creative name" />
+          </div>
+        </div>
+
+        <div class="field field--full">
+          <label for="audience">Audience</label>
+          <input type="text" id="audience" placeholder="Target audience description" />
+        </div>
+
+        <button id="generateBtn" class="btn-generate">
+          <span>Generate</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </section>
+
+      <!-- SECTION 2: OUTPUT -->
+      <section class="section section--output" id="outputSection">
+        <div class="section-label">
+          <span class="section-num">02</span>
+          <span class="section-name">Output</span>
+        </div>
+
+        <div class="output-group">
+          <div class="output-row">
+            <div class="output-label">Campaign Name</div>
+            <div class="output-value" id="out-campaignName">—</div>
+            <button class="btn-copy" data-target="out-campaignName" title="Copy">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <div class="output-row">
+            <div class="output-label">Campaign Medium</div>
+            <div class="output-value" id="out-medium">—</div>
+            <button class="btn-copy" data-target="out-medium" title="Copy">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <div class="output-row">
+            <div class="output-label">Campaign Content</div>
+            <div class="output-value" id="out-content">—</div>
+            <button class="btn-copy" data-target="out-content" title="Copy">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <div class="output-row">
+            <div class="output-label">Campaign Term</div>
+            <div class="output-value" id="out-term">—</div>
+            <button class="btn-copy" data-target="out-term" title="Copy">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <div class="output-row output-row--utm">
+            <div class="output-label">Full UTM URL</div>
+            <div class="output-value output-value--utm" id="out-utm">—</div>
+            <button class="btn-copy btn-copy--utm" data-target="out-utm" title="Copy Full UTM">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button id="resetBtn" class="btn-reset">Reset All</button>
+        <p class="credit">Made by Edgar Akonski</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
