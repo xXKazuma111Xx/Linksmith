@@ -1,6 +1,7 @@
-// Linksmith by Edgar Akonski - v1.1.1
+// Linksmith by Edgar Akonski - v1.2.0
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('version').textContent = 'v' + chrome.runtime.getManifest().version;
   restoreState();
   bindEvents();
 });
@@ -48,6 +49,7 @@ function autoFillBaseUrl() {
 function bindEvents() {
   document.getElementById('generateBtn').addEventListener('click', generate);
   document.getElementById('resetBtn').addEventListener('click', resetAll);
+  document.getElementById('addDialog').addEventListener('close', addCustomOption);
 
   INPUT_IDS.forEach(id => {
     const el = document.getElementById(id);
@@ -176,7 +178,8 @@ function saveState() {
 }
 
 function restoreState() {
-  chrome.storage.local.get(['campaignNamerState'], (result) => {
+  chrome.storage.local.get(['campaignNamerState', 'customOptions'], (result) => {
+    setupAddNew(result.customOptions || {});
     const state = result.campaignNamerState;
     if (state) {
       INPUT_IDS.forEach(id => {
@@ -188,6 +191,7 @@ function restoreState() {
         if (el && state[id]) el.textContent = state[id];
       });
     }
+    syncPrev();
     autoFillDate();
     autoFillBaseUrl();
   });
@@ -205,9 +209,55 @@ function resetAll() {
   if (lang) lang.value = 'HE';
   if (loc)  loc.value  = 'IL';
 
+  syncPrev();
   OUTPUT_IDS.forEach(id => setOutput(id, '—'));
   chrome.storage.local.remove('campaignNamerState');
   autoFillDate();
   autoFillBaseUrl();
   showToast('Reset ✓');
+}
+
+// ─── "Add New +" in every dropdown ─────────────────────────────────────────
+// ponytail: custom options can only be added, not removed. Add a delete UI if the lists get messy.
+const ADD_NEW = '__add_new__';
+let addTarget = null;
+
+function setupAddNew(custom) {
+  document.querySelectorAll('main select').forEach(sel => {
+    (custom[sel.id] || []).forEach(v => sel.add(new Option(v, v)));
+    sel.add(new Option('Add New +', ADD_NEW));
+    sel.addEventListener('change', () => {
+      if (sel.value !== ADD_NEW) { sel.dataset.prev = sel.value; return; }
+      sel.value = sel.dataset.prev || '';  // never keep "Add New +" selected
+      saveState();
+      addTarget = sel;
+      const dialog = document.getElementById('addDialog');
+      document.getElementById('addTitle').textContent = 'Add to ' + sel.labels[0].textContent;
+      document.getElementById('addInput').value = '';
+      dialog.returnValue = '';
+      dialog.showModal();
+    });
+  });
+}
+
+function syncPrev() {
+  document.querySelectorAll('main select').forEach(sel => { sel.dataset.prev = sel.value; });
+}
+
+function addCustomOption(e) {
+  const sel = addTarget;
+  const v = document.getElementById('addInput').value.trim();
+  if (e.target.returnValue !== 'ok' || !v || !sel) return;
+  const existing = [...sel.options].find(o => o.value !== ADD_NEW && o.value.toLowerCase() === v.toLowerCase());
+  if (!existing) {
+    sel.add(new Option(v, v), sel.options.length - 1);  // keep "Add New +" last
+    chrome.storage.local.get('customOptions', r => {
+      const c = r.customOptions || {};
+      (c[sel.id] = c[sel.id] || []).push(v);
+      chrome.storage.local.set({ customOptions: c });
+    });
+  }
+  sel.value = existing ? existing.value : v;
+  sel.dataset.prev = sel.value;
+  saveState();
 }

@@ -14,7 +14,7 @@
 
     <header>
       <span class="header-title">Linksmith</span>
-      <span class="header-sub">by Edgar Akonski</span>
+      <span class="header-sub">by Edgar Akonski · <span id="version"></span></span>
     </header>
 
     <main>
@@ -194,6 +194,17 @@
       </section>
     </main>
   </div>
+
+  <dialog id="addDialog">
+    <form method="dialog">
+      <label for="addInput" id="addTitle">Add new</label>
+      <input type="text" id="addInput" required autocomplete="off" />
+      <div class="dialog-actions">
+        <button value="ok" class="btn-add">Add</button>
+        <button value="cancel" formnovalidate>Cancel</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="popup.js"></script>
 </body>
