@@ -1,4 +1,4 @@
-// Linksmith by Edgar Akonski - v1.1.0
+// Linksmith by Edgar Akonski - v1.1.1
 
 document.addEventListener('DOMContentLoaded', () => {
   restoreState();
